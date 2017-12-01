@@ -56,4 +56,3 @@ int clastic_count(clastic_t *cls, const char *index, const char *type)
     //TODO
 }
 
-#endif
