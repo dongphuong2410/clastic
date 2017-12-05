@@ -27,7 +27,7 @@ typedef struct {
 } string;
 
 size_t _writedata(void *ptr, size_t size, size_t nmemb, void *data);
-string *http_send(CURL *curl, const char *query,  method_t method);
+string *http_send(CURL *curl, const char *query,  method_t method, char *data);
 
 string *_init_string(void);
 void _free_string(string *s);
@@ -50,7 +50,7 @@ int clastic_index_exist(clastic_t *cls, const char *index)
 {
     char query[STR_BUFF];
     snprintf(query, STR_BUFF, "%s/%s", cls->url, index);
-    string *result = http_send(cls->curl, query, CLASTIC_METHOD_HEAD);
+    string *result = http_send(cls->curl, query, CLASTIC_METHOD_HEAD, NULL);
     int exist = 0;
     if (strstr(result->ptr, "HTTP/1.1 200 OK")) {
         exist = 1;
@@ -71,7 +71,7 @@ int clastic_delete_index(clastic_t *cls, const char *index)
     char query[STR_BUFF];
     snprintf(query, STR_BUFF, "%s/%s", cls->url, index);
 
-    string *result = http_send(cls->curl, query, CLASTIC_METHOD_DELETE);
+    string *result = http_send(cls->curl, query, CLASTIC_METHOD_DELETE, NULL);
     json_object *root = json_tokener_parse(result->ptr);
     if (root) {
         json_object *ack = NULL;
@@ -91,7 +91,7 @@ int clastic_get_by_id(clastic_t *cls, const char *index, const char *type, const
 {
     char query[STR_BUFF];
     snprintf(query, STR_BUFF, "%s/%s/%s/%s", cls->url, index, type, id);
-    string *result = http_send(cls->curl, query, CLASTIC_METHOD_GET);
+    string *result = http_send(cls->curl, query, CLASTIC_METHOD_GET, NULL);
     json_object *root = json_tokener_parse(result->ptr);
     if (root) {
         json_object *source = NULL;
@@ -112,9 +112,23 @@ void clastic_get_by_query(clastic_t *cls, const char *index, const char *type, c
     //TODO
 }
 
-void clastic_put(clastic_t *cls, const char *index, const char *type, const char *id, char *data)
+int clastic_put(clastic_t *cls, const char *index, const char *type, const char *id, char *json_data)
 {
-    //TODO
+    char query[STR_BUFF];
+    snprintf(query, STR_BUFF, "%s/%s/%s/%s", cls->url, index, type, id);
+    string *result = http_send(cls->curl, query, CLASTIC_METHOD_POST, json_data);
+    json_object *root = json_tokener_parse(result->ptr);
+    int success = 0;
+    if (root) {
+        json_object *created = NULL;
+        if (json_object_object_get_ex(root, "created", &created)) {
+            if (created) {
+                json_bool value = json_object_get_boolean(created);
+                if (value) success = 1;
+            }
+        }
+    }
+    return success;
 }
 
 int clastic_count(clastic_t *cls, const char *index, const char *type)
@@ -153,7 +167,7 @@ void _free_string(string *s)
     free(s);
 }
 
-string *http_send(CURL *curl, const char *query,  method_t method)
+string *http_send(CURL *curl, const char *query,  method_t method, char *data)
 {
     string *s = _init_string();
     curl_easy_reset(curl);
@@ -171,6 +185,9 @@ string *http_send(CURL *curl, const char *query,  method_t method)
         case CLASTIC_METHOD_HEAD:
             curl_easy_setopt(curl, CURLOPT_HEADER, 1);
             break;
+    }
+    if (data && (method == CLASTIC_METHOD_POST || method == CLASTIC_METHOD_DELETE)) {
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data);
     }
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, _writedata);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, s);

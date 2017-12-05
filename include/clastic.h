@@ -66,8 +66,9 @@ void clastic_get_by_query(clastic_t *cls, const char *index, const char *type, c
   * @param[in] type Type
   * @param[in] id id
   * @param[in] data Found data
+  * @return 0 if success,  -1 if error
   */
-void clastic_put(clastic_t *cls, const char *index, const char *type, const char *id, char *data);
+int clastic_put(clastic_t *cls, const char *index, const char *type, const char *id, char *data);
 
 /**
   * @brief Count number of documents
