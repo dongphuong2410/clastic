@@ -11,6 +11,8 @@ AC_PROG_CC
 AC_PROG_RANLIB
 
 # Checks for libraries.
+AC_SEARCH_LIBS([curl_easy_init], [curl])
+AC_SEARCH_LIBS([json_object_new_string], [json-c])
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdlib.h])
@@ -30,5 +32,6 @@ AM_CONDITIONAL([DEBUG], [test x$debug = xyes])
 AC_CONFIG_FILES([Makefile
                     include/Makefile
                     src/Makefile
+                    examples/Makefile
                 ])
 AC_OUTPUT

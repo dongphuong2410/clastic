@@ -1,6 +1,10 @@
 autoscan.log
 **/Makefile
 **/Makefile.in
+**/*.swp
+**/*.o
+**/*.a    
+**/.deps
 aclocal.m4
 autom4te.cache/
 compile

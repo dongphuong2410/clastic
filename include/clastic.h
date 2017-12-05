@@ -1,6 +1,8 @@
 #ifndef __CLASTIC_H__
 #define __CLASTIC_H__
 
+#define CLASTIC_DATA_BUFFER 2048
+
 typedef struct _clastic_t clastic_t;
 
 /**
@@ -44,9 +46,10 @@ int clastic_delete_index(clastic_t *cls, const char *index);
   * @param[in] index Index
   * @param[in] type Type
   * @param[in] id id
-  * @param[out] data Found data
+  * @param[out] data Found data, if no data found, data will be set to empty string
+  * @return 0 if function ok, return -1 on error
   */
-void clastic_get_by_id(clastic_t *cls, const char *index, const char *type, const char *id, char *data);
+int clastic_get_by_id(clastic_t *cls, const char *index, const char *type, const char *id, char *data);
 
 /**
   * @brief Get and index from query
@@ -75,3 +78,5 @@ void clastic_put(clastic_t *cls, const char *index, const char *type, const char
 int clastic_count(clastic_t *cls, const char *index, const char *type);
 
 #endif
+
+
