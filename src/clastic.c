@@ -65,7 +65,7 @@ int clastic_create_index(clastic_t *cls, const char *index)
     return 0;
 }
 
-int clastic_delete_index(clastic_t *cls, const char *index)
+int clastic_remove_index(clastic_t *cls, const char *index)
 {
     int success = 0;
     char query[STR_BUFF];
@@ -107,12 +107,7 @@ int clastic_get_by_id(clastic_t *cls, const char *index, const char *type, const
     return 0;
 }
 
-void clastic_get_by_query(clastic_t *cls, const char *index, const char *type, const char *query, char *data)
-{
-    //TODO
-}
-
-int clastic_put(clastic_t *cls, const char *index, const char *type, const char *id, char *json_data)
+int clastic_insert(clastic_t *cls, const char *index, const char *type, const char *id, char *json_data)
 {
     char query[STR_BUFF];
     snprintf(query, STR_BUFF, "%s/%s/%s/%s", cls->url, index, type, id);
@@ -129,12 +124,6 @@ int clastic_put(clastic_t *cls, const char *index, const char *type, const char 
         }
     }
     return success;
-}
-
-int clastic_count(clastic_t *cls, const char *index, const char *type)
-{
-    return 0;
-    //TODO
 }
 
 size_t _writedata(void *ptr, size_t size, size_t nmemb, void *data)

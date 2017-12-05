@@ -39,7 +39,7 @@ int clastic_create_index(clastic_t *cls, const char *index);
   * @param index Index to be deleted
   * @return 0 if success
   */
-int clastic_delete_index(clastic_t *cls, const char *index);
+int clastic_remove_index(clastic_t *cls, const char *index);
 
 /**
   * @brief Get and index from id
@@ -52,15 +52,6 @@ int clastic_delete_index(clastic_t *cls, const char *index);
 int clastic_get_by_id(clastic_t *cls, const char *index, const char *type, const char *id, char *data);
 
 /**
-  * @brief Get and index from query
-  * @param[in] index Index
-  * @param[in] type Type
-  * @param[in] id id
-  * @param[out] data Found data (can be multiple record)
-  */
-void clastic_get_by_query(clastic_t *cls, const char *index, const char *type, const char *query, char *data);
-
-/**
   * @brief Insert data into an index
   * @param[in] index Index
   * @param[in] type Type
@@ -68,15 +59,7 @@ void clastic_get_by_query(clastic_t *cls, const char *index, const char *type, c
   * @param[in] data Found data
   * @return 0 if success,  -1 if error
   */
-int clastic_put(clastic_t *cls, const char *index, const char *type, const char *id, char *data);
-
-/**
-  * @brief Count number of documents
-  * @param[in] index Index
-  * @param[in] type Type
-  * @return Number of documents
-  */
-int clastic_count(clastic_t *cls, const char *index, const char *type);
+int clastic_insert(clastic_t *cls, const char *index, const char *type, const char *id, char *data);
 
 #endif
 

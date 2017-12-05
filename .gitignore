@@ -15,8 +15,8 @@ depcomp
 install-sh
 missing
 examples/test_create_index
-examples/test_delete_index
+examples/test_remove_index
 examples/test_get_by_id
 examples/test_index_exist
-examples/test_put
+examples/test_insert
 
