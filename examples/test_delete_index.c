@@ -12,7 +12,7 @@ int main(int argc, char **argvs)
     clastic_t *cls = clastic_init("localhost:9200");
     int deleted = clastic_delete_index(cls, argvs[1]);
     if (deleted) {
-        printf("Successfully delete index %s\n", argvs[0]);
+        printf("Successfully delete index %s\n", argvs[1]);
     }
     else {
         printf("Error happens\n");
